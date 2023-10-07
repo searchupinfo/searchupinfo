@@ -3,7 +3,7 @@ import { GoogleAuth } from "google-auth-library";
 
 export async function load({ params }) {
   const MODEL_NAME = "models/text-bison-001";
-  const API_KEY = "AIzaSyDpYMB_Je8_JEctyZ7WJ9lLlQB8TsV0CQQ";
+  const API_KEY = import.meta.env.VITE_API_KEY;
 
   const client = new TextServiceClient({
     authClient: new GoogleAuth().fromAPIKey(API_KEY),
