@@ -1,9 +1,0 @@
-version: '3.7'
-services:
-  # Update this to the name of the service you want to work with in your docker-compose.yml file
-  server:
-    image: node:latest
-    command: >
-      sh -c "npm install && npm run dev"
-    ports:
-      - "8080:8080"
