@@ -12,7 +12,9 @@ export async function load({ params }) {
   // article name should remove _ and - and replace with spaces
   let articleName = params.slug.replace(/_/g, " ").replace(/-/g, " ");
 
-  const promptString = `Write a wikipedia article for ${articleName}}`;
+  console.log(articleName)
+
+  const promptString = `Write a wikipedia article for ${articleName}}. Make sure to use proper markdown headings with #`;
   // const stopSequences = [];
 
   let response = await client.generateText({
@@ -27,7 +29,7 @@ export async function load({ params }) {
     // optional, for nucleus sampling decoding strategy
     topP: 0.95,
     // optional, maximum number of output tokens to generate
-    maxOutputTokens: 1024,
+    maxOutputTokens: 8000,
     // optional, sequences at which to stop model generation
     //stopSequences: stopSequences,
     // optional, safety settings
