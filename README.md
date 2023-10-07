@@ -2,7 +2,9 @@
 
 super secret project.
 
-run
+1. Get your API key at https://makersuite.google.com/app/apikey
+
+2. run
 
 ```cp sample.env.local .env.local``` and fill in your API key to get started.
 
