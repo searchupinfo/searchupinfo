@@ -1,7 +1,7 @@
 <script>
-	export let data;
-
 	import { marked } from 'marked';
+
+	export let data;
 </script>
 
 <svelte:head>

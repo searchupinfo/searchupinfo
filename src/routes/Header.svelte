@@ -10,6 +10,12 @@
 	function handleHome() {
 		goto('/');
 	}
+
+	function handleKeyPress(event) {
+		if (event.key === 'Enter') {
+			handleSearch();
+		}
+	}
 </script>
 
 <header>
@@ -17,7 +23,7 @@
 		<button on:click={handleHome}>Home</button>
 	</div>
 	<div class="search">
-		<input type="text" placeholder="Search..." bind:value={searchQuery} />
+		<input type="text" placeholder="Search..." bind:value={searchQuery} on:keypress={handleKeyPress} />
 		<button on:click={handleSearch}>Search</button>
 	</div>
 </header>
