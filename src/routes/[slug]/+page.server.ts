@@ -47,14 +47,17 @@ async function runModel(promptString: string, temperature: number) {
 }
 
 export async function load({ params }) {
-
   let articleName = params.slug
+
+  let articleText: string = ""
+
+  let introductionText = await runModel(`Write the introduction of a wikipedia article about ${articleName}`, 0.7)
+
+  articleText += `# ${articleName}\n${introductionText}\n`
   
   let responseSectionsString = await runModel(`Return a JSON array as "[..., ...]" for the section names of a wikipedia article about ${articleName}. Do not format it as markdown.`, 0.0)
 
   console.log(responseSectionsString)
-
-  let response: string = ""
 
   if (responseSectionsString) {
     let responseSections: Array<string> = JSON.parse(responseSectionsString)
@@ -70,19 +73,19 @@ export async function load({ params }) {
       if (sectionText) {
         const regexPattern = new RegExp(`^.*\\b${sectionName}\\b.*\\n?`);
         sectionText = sectionText.replace(regexPattern, '');
-        response += `## ${sectionName}\n${sectionText}\n\n`
+        articleText += `## ${sectionName}\n${sectionText}\n\n`
       }
     }
 
     //runModel(`Write a wikipedia article for ${params.slug}. Write a page title first as a level-1 heading (#). For example: "# Page Title". Then write an introduction/summarization after that. The intro SHOULD NOT have a heading for its section (there should be no ## Introduction in the output). it should immedeately folow the page title. Make sure to use proper markdown headings with ## for the remaining sections. Do not write a conclusion or references section.`)
   }
   else {
-    response = "Sections were unable to be generated."
+    articleText = "Sections were unable to be generated."
   }
 
   return {
     props: {
-      response,
+      response: articleText,
     },
   };
 }
