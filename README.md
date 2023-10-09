@@ -6,7 +6,9 @@ super secret project.
 
 2. run
 
-```cp sample.env.local .env.local``` and fill in your API key to get started.
+```cp sample.env.local .env.local``` and fill in your API key.
+
+Ask lectrician1 for the Hasura key.
 
 ## Developing
 

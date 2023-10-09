@@ -1,0 +1,10 @@
+query GetPrompts {
+  prompts {
+    timestamp
+    model
+    prompt
+    output
+    prompt_options
+    id
+  }
+}
