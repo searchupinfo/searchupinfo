@@ -2,6 +2,7 @@
 	"name": "pedia",
 	"version": "0.0.1",
 	"scripts": {
+		"generate": "graphql-codegen",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",

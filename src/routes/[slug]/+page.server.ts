@@ -12,6 +12,9 @@ async function runModel(promptString: string, temperature: number) {
 
   console.log(promptString)
 
+  // Make sure to set all to high (unfortunatly can't turn off safety settings) so that it can generate articles about controversial topics
+  const safetySettings = [{ "category": "HARM_CATEGORY_DEROGATORY", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_TOXICITY", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_VIOLENCE", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_SEXUAL", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_MEDICAL", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_DANGEROUS", "threshold": "BLOCK_ONLY_HIGH" }]
+
   // const stopSequences = [];
 
   return await client.generateText({
@@ -30,12 +33,12 @@ async function runModel(promptString: string, temperature: number) {
     // optional, sequences at which to stop model generation
     //stopSequences: stopSequences,
     // optional, safety settings
-    safetySettings: [{"category":"HARM_CATEGORY_DEROGATORY","threshold": "BLOCK_ONLY_HIGH"},{"category":"HARM_CATEGORY_TOXICITY","threshold":"BLOCK_ONLY_HIGH"},{"category":"HARM_CATEGORY_VIOLENCE","threshold":"BLOCK_ONLY_HIGH"},{"category":"HARM_CATEGORY_SEXUAL","threshold":"BLOCK_ONLY_HIGH"},{"category":"HARM_CATEGORY_MEDICAL","threshold":"BLOCK_ONLY_HIGH"},{"category":"HARM_CATEGORY_DANGEROUS","threshold":"BLOCK_ONLY_HIGH"}],
+    safetySettings: safetySettings,
     prompt: {
       text: promptString,
     },
   }).then(result => {
-    if (result && result[0] && result[0].candidates ) {
+    if (result && result[0] && result[0].candidates) {
       if (result[0].candidates[0])
         return result[0].candidates[0].output!;
       else
@@ -51,11 +54,13 @@ export async function load({ params }) {
 
   let articleText: string = ""
 
-  let introductionText = await runModel(`Write the introduction of a wikipedia article about ${articleName}`, 0.7)
+  // You need to surround the article name in quotes so that it doesn't misinterpret a prompt like "Write the introduction of a wikipedia article about twice" and it returns a generic reponse twice.
+  let introductionText = await runModel(`Write the introduction of a wikipedia article about "${articleName}"`, 0.7)
 
   articleText += `# ${articleName}\n${introductionText}\n`
-  
-  let responseSectionsString = await runModel(`Return a JSON array as "[..., ...]" for the section names of a wikipedia article about ${articleName}. Do not format it as markdown.`, 0.0)
+
+  // It is super important to show the sturcture the output is and to specify it not to format it as markdown so that it does not wrap it in ```js ```. Setting temp at 0.0 also reduces the likelihood of this happening. 
+  let responseSectionsString = await runModel(`Return a JSON array as "[..., ...]" for the section names of a wikipedia article about "${articleName}". Do not format it as markdown.`, 0.0)
 
   console.log(responseSectionsString)
 
@@ -68,7 +73,7 @@ export async function load({ params }) {
 
     // write each section
     for (let sectionName of responseSections) {
-      let sectionText = await runModel(`Write the ${sectionName} section of a wikipedia article about ${articleName}. Do not include the title of the section or links inside of the text`, 0.7)
+      let sectionText = await runModel(`Write the ${sectionName} section of a wikipedia article about "${articleName}". Do not include the title of the section or links inside of the text`, 0.7)
 
       if (sectionText) {
         const regexPattern = new RegExp(`^.*\\b${sectionName}\\b.*\\n?`);
