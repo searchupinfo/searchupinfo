@@ -12,11 +12,6 @@ async function runModel(promptString: string, temperature: number) {
 
     console.log(promptString)
 
-    // Make sure to set all to high (unfortunatly can't turn off safety settings) so that it can generate articles about controversial topics
-    const safetySettings = [{ "category": "HARM_CATEGORY_DEROGATORY", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_TOXICITY", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_VIOLENCE", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_SEXUAL", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_MEDICAL", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_DANGEROUS", "threshold": "BLOCK_ONLY_HIGH" }]
-
-    // const stopSequences = [];
-
     return await client.generateText({
         // required, which model to use to generate the result
         model: MODEL_NAME,
@@ -33,7 +28,8 @@ async function runModel(promptString: string, temperature: number) {
         // optional, sequences at which to stop model generation
         //stopSequences: stopSequences,
         // optional, safety settings
-        safetySettings: safetySettings,
+        // Make sure to set all to high (unfortunatly can't turn off safety settings) so that it can generate articles about controversial topics
+        safetySettings: [{ "category": "HARM_CATEGORY_DEROGATORY", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_TOXICITY", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_VIOLENCE", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_SEXUAL", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_MEDICAL", "threshold": "BLOCK_ONLY_HIGH" }, { "category": "HARM_CATEGORY_DANGEROUS", "threshold": "BLOCK_ONLY_HIGH" }],
         prompt: {
             text: promptString,
         },
@@ -52,50 +48,55 @@ async function runModel(promptString: string, temperature: number) {
 export async function GET(event) {
     let articleName = event.params.slug
 
-    // check if article exists and return it if it does
-    const getArticle = new GetArticleVersionsStore()
-    let response = await getArticle.fetch({event, variables: {name: articleName}})
+    if (articleName.length < 31) {
+        // check if article exists and return it if it does
+        const getArticle = new GetArticleVersionsStore()
+        let response = await getArticle.fetch({ event, variables: { name: articleName } })
 
-    let articleText = response.data?.article_versions[0]?.text ?? null
+        let articleText = response.data?.article_versions[0]?.text ?? null
 
-    if (articleText) {
-        return new Response(articleText)
-    }
+        if (articleText) {
+            return new Response(articleText)
+        }
 
-    // You need to surround the article name in quotes so that it doesn't misinterpret a prompt like "Write the introduction of a wikipedia article about twice" and it returns a generic reponse twice.
-    let introductionText = await runModel(`Write the introduction of a wikipedia article about "${articleName}"`, 0.7)
+        // You need to surround the article name in quotes so that it doesn't misinterpret a prompt like "Write the introduction of a wikipedia article about twice" and it returns a generic reponse twice.
+        let introductionText = await runModel(`Write the introduction of a wikipedia article about "${articleName}"`, 0.7)
 
-    articleText = `# ${articleName}\n${introductionText}\n`
+        articleText = `# ${articleName}\n${introductionText}\n`
 
-    // It is super important to show the sturcture the output is and to specify it not to format it as markdown so that it does not wrap it in ```js ```. Setting temp at 0.0 also reduces the likelihood of this happening. 
-    let responseSectionsString = await runModel(`Return a JSON array as "[..., ...]" for the section names of a wikipedia article about "${articleName}". Do not format it as markdown. Do not include an introduction.`, 0.0)
+        // It is super important to show the sturcture the output is and to specify it not to format it as markdown so that it does not wrap it in ```js ```. Setting temp at 0.0 also reduces the likelihood of this happening. 
+        let responseSectionsString = await runModel(`Return a JSON array as "[..., ...]" for the section names of a wikipedia article about "${articleName}". Do not format it as markdown. Do not include an introduction.`, 0.0)
 
-    console.log(responseSectionsString)
+        console.log(responseSectionsString)
 
-    if (responseSectionsString) {
-        let responseSections: Array<string> = JSON.parse(responseSectionsString)
+        if (responseSectionsString) {
+            let responseSections: Array<string> = JSON.parse(responseSectionsString)
 
-        // remove references, see also, external links, elements regardless of case
-        responseSections = responseSections.filter(section => !section.match(/references|see also|external links/i))
+            // remove references, see also, external links, elements regardless of case
+            responseSections = responseSections.filter(section => !section.match(/references|see also|external links/i))
 
-        // write each section
-        for (let sectionName of responseSections) {
-            let sectionText = await runModel(`Write the ${sectionName} section of a wikipedia article about "${articleName}". Do not include the title of the section or links inside of the text`, 0.7)
+            // write each section
+            for (let sectionName of responseSections) {
+                let sectionText = await runModel(`Write the ${sectionName} section of a wikipedia article about "${articleName}". Do not include the title of the section or links inside of the text`, 0.7)
 
-            if (sectionText) {
-                const regexPattern = new RegExp(`^.*\\b${sectionName}\\b.*\\n?`);
-                sectionText = sectionText.replace(regexPattern, '');
-                articleText += `## ${sectionName}\n${sectionText}\n\n`
+                if (sectionText) {
+                    const regexPattern = new RegExp(`^.*\\b${sectionName}\\b.*\\n?`);
+                    sectionText = sectionText.replace(regexPattern, '');
+                    articleText += `## ${sectionName}\n${sectionText}\n\n`
+                }
             }
         }
+        else {
+            articleText = "Sections were unable to be generated."
+        }
+
+        // Add the article to the DB
+        const insertArticle = new InsertArticleVersionsStore()
+        await insertArticle.mutate({ name: articleName, text: articleText }, { event: event })
+
+        return new Response(articleText)
     }
     else {
-        articleText = "Sections were unable to be generated."
+        return new Response('Title must be less than 31 characters.')
     }
-
-    // Add the article to the DB
-    const insertArticle = new InsertArticleVersionsStore()
-    await insertArticle.mutate({name: articleName, text: articleText}, {event: event})
-
-    return new Response(articleText)
 }
