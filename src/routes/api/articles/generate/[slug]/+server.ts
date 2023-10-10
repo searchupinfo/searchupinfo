@@ -65,7 +65,7 @@ export async function GET(event) {
         articleText = `# ${articleName}\n${introductionText}\n`
 
         // It is super important to show the sturcture the output is and to specify it not to format it as markdown so that it does not wrap it in ```js ```. Setting temp at 0.0 also reduces the likelihood of this happening. 
-        let responseSectionsString = await runModel(`Return a JSON array as "[..., ...]" for the section names of a wikipedia article about "${articleName}". Do not format it as markdown. Do not include an introduction.`, 0.0)
+        let responseSectionsString = await runModel(`Return a JSON array as "[..., ...]" with at most 20 elements for the section names of a wikipedia article about "${articleName}". Do not format it as markdown. Do not include an introduction. DO NOT start with \`\`\` and the array must end in with a ] and no trailing comma`, 0.0)
 
         console.log(responseSectionsString)
 
