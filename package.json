@@ -13,6 +13,7 @@
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-node": "^1.3.1",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/cookie": "^0.5.1",
 		"houdini": "^1.2.27",
@@ -26,6 +27,7 @@
 	"type": "module",
 	"dependencies": {
 		"@google-ai/generativelanguage": "^1.1.0",
+		"dotenv": "^16.3.1",
 		"google-auth-library": "^9.1.0",
 		"marked": "^9.1.0"
 	}

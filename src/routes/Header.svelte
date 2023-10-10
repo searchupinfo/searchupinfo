@@ -1,4 +1,4 @@
-<script>
+<script lang=ts>
 	import { goto } from '$app/navigation';
 
 	let searchQuery = '';
@@ -11,7 +11,7 @@
 		goto('/');
 	}
 
-	function handleKeyPress(event) {
+	function handleKeyPress(event: { key: string; }) {
 		if (event.key === 'Enter') {
 			handleSearch();
 		}
