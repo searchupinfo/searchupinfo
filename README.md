@@ -1,18 +1,20 @@
-# pedia
+# SearchUpInfo
 
-super secret project.
+An encyclopedia written by the large language model PaLM2.
 
-1. Get your API key at https://makersuite.google.com/app/apikey
+## Developing
 
-2. run
+Get your API key at https://makersuite.google.com/app/apikey
+
+run
 
 ```cp sample.env.local .env.local``` and fill in your API key.
 
 Ask lectrician1 for the Hasura key.
 
-## Developing
+Install dependencies with `npm install` (or `pnpm install` or `yarn`)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Start a development server:
 
 ```bash
 npm run dev
