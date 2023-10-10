@@ -4,7 +4,7 @@
 	let searchQuery = '';
 	
 	function handleSearch() {
-		goto(`/${searchQuery}`);
+		goto(`/articles/${searchQuery.toLowerCase()}`);
 	}
 	
 	function handleHome() {

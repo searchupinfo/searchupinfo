@@ -66,6 +66,267 @@ input String_comparison_exp {
   _similar: String
 }
 
+"""
+columns and relationships of "article_versions"
+"""
+type article_versions {
+  concept_id: bigint
+  created_at: timestamptz!
+  id: bigint!
+  name: String!
+  text: String!
+}
+
+"""
+aggregated selection of "article_versions"
+"""
+type article_versions_aggregate {
+  aggregate: article_versions_aggregate_fields
+  nodes: [article_versions!]!
+}
+
+"""
+aggregate fields of "article_versions"
+"""
+type article_versions_aggregate_fields {
+  avg: article_versions_avg_fields
+  count(columns: [article_versions_select_column!], distinct: Boolean): Int!
+  max: article_versions_max_fields
+  min: article_versions_min_fields
+  stddev: article_versions_stddev_fields
+  stddev_pop: article_versions_stddev_pop_fields
+  stddev_samp: article_versions_stddev_samp_fields
+  sum: article_versions_sum_fields
+  var_pop: article_versions_var_pop_fields
+  var_samp: article_versions_var_samp_fields
+  variance: article_versions_variance_fields
+}
+
+"""aggregate avg on columns"""
+type article_versions_avg_fields {
+  concept_id: Float
+  id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "article_versions". All fields are combined with a logical 'AND'.
+"""
+input article_versions_bool_exp {
+  _and: [article_versions_bool_exp!]
+  _not: article_versions_bool_exp
+  _or: [article_versions_bool_exp!]
+  concept_id: bigint_comparison_exp
+  created_at: timestamptz_comparison_exp
+  id: bigint_comparison_exp
+  name: String_comparison_exp
+  text: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "article_versions"
+"""
+enum article_versions_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  articles_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "article_versions"
+"""
+input article_versions_inc_input {
+  concept_id: bigint
+  id: bigint
+}
+
+"""
+input type for inserting data into table "article_versions"
+"""
+input article_versions_insert_input {
+  concept_id: bigint
+  created_at: timestamptz
+  id: bigint
+  name: String
+  text: String
+}
+
+"""aggregate max on columns"""
+type article_versions_max_fields {
+  concept_id: bigint
+  created_at: timestamptz
+  id: bigint
+  name: String
+  text: String
+}
+
+"""aggregate min on columns"""
+type article_versions_min_fields {
+  concept_id: bigint
+  created_at: timestamptz
+  id: bigint
+  name: String
+  text: String
+}
+
+"""
+response of any mutation on the table "article_versions"
+"""
+type article_versions_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [article_versions!]!
+}
+
+"""
+on_conflict condition type for table "article_versions"
+"""
+input article_versions_on_conflict {
+  constraint: article_versions_constraint!
+  update_columns: [article_versions_update_column!]! = []
+  where: article_versions_bool_exp
+}
+
+"""Ordering options when selecting data from "article_versions"."""
+input article_versions_order_by {
+  concept_id: order_by
+  created_at: order_by
+  id: order_by
+  name: order_by
+  text: order_by
+}
+
+"""primary key columns input for table: article_versions"""
+input article_versions_pk_columns_input {
+  id: bigint!
+}
+
+"""
+select columns of table "article_versions"
+"""
+enum article_versions_select_column {
+  """column name"""
+  concept_id
+
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  text
+}
+
+"""
+input type for updating data in table "article_versions"
+"""
+input article_versions_set_input {
+  concept_id: bigint
+  created_at: timestamptz
+  id: bigint
+  name: String
+  text: String
+}
+
+"""aggregate stddev on columns"""
+type article_versions_stddev_fields {
+  concept_id: Float
+  id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type article_versions_stddev_pop_fields {
+  concept_id: Float
+  id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type article_versions_stddev_samp_fields {
+  concept_id: Float
+  id: Float
+}
+
+"""
+Streaming cursor of the table "article_versions"
+"""
+input article_versions_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: article_versions_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input article_versions_stream_cursor_value_input {
+  concept_id: bigint
+  created_at: timestamptz
+  id: bigint
+  name: String
+  text: String
+}
+
+"""aggregate sum on columns"""
+type article_versions_sum_fields {
+  concept_id: bigint
+  id: bigint
+}
+
+"""
+update columns of table "article_versions"
+"""
+enum article_versions_update_column {
+  """column name"""
+  concept_id
+
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  text
+}
+
+input article_versions_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: article_versions_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: article_versions_set_input
+
+  """filter the rows which have to be updated"""
+  where: article_versions_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type article_versions_var_pop_fields {
+  concept_id: Float
+  id: Float
+}
+
+"""aggregate var_samp on columns"""
+type article_versions_var_samp_fields {
+  concept_id: Float
+  id: Float
+}
+
+"""aggregate variance on columns"""
+type article_versions_variance_fields {
+  concept_id: Float
+  id: Float
+}
+
 scalar bigint
 
 """
@@ -132,6 +393,19 @@ input jsonb_comparison_exp {
 """mutation root"""
 type mutation_root {
   """
+  delete data from the table: "article_versions"
+  """
+  delete_article_versions(
+    """filter the rows which have to be deleted"""
+    where: article_versions_bool_exp!
+  ): article_versions_mutation_response
+
+  """
+  delete single row from the table: "article_versions"
+  """
+  delete_article_versions_by_pk(id: bigint!): article_versions
+
+  """
   delete data from the table: "prompts"
   """
   delete_prompts(
@@ -143,6 +417,28 @@ type mutation_root {
   delete single row from the table: "prompts"
   """
   delete_prompts_by_pk(id: bigint!): prompts
+
+  """
+  insert data into the table: "article_versions"
+  """
+  insert_article_versions(
+    """the rows to be inserted"""
+    objects: [article_versions_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: article_versions_on_conflict
+  ): article_versions_mutation_response
+
+  """
+  insert a single row into the table: "article_versions"
+  """
+  insert_article_versions_one(
+    """the row to be inserted"""
+    object: article_versions_insert_input!
+
+    """upsert condition"""
+    on_conflict: article_versions_on_conflict
+  ): article_versions
 
   """
   insert data into the table: "prompts"
@@ -165,6 +461,40 @@ type mutation_root {
     """upsert condition"""
     on_conflict: prompts_on_conflict
   ): prompts
+
+  """
+  update data of the table: "article_versions"
+  """
+  update_article_versions(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: article_versions_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: article_versions_set_input
+
+    """filter the rows which have to be updated"""
+    where: article_versions_bool_exp!
+  ): article_versions_mutation_response
+
+  """
+  update single row of the table: "article_versions"
+  """
+  update_article_versions_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: article_versions_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: article_versions_set_input
+    pk_columns: article_versions_pk_columns_input!
+  ): article_versions
+
+  """
+  update multiples rows of table: "article_versions"
+  """
+  update_article_versions_many(
+    """updates to execute, in order"""
+    updates: [article_versions_updates!]!
+  ): [article_versions_mutation_response]
 
   """
   update data of the table: "prompts"
@@ -585,6 +915,51 @@ type prompts_variance_fields {
 
 type query_root {
   """
+  fetch data from the table: "article_versions"
+  """
+  article_versions(
+    """distinct select on columns"""
+    distinct_on: [article_versions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_versions_order_by!]
+
+    """filter the rows returned"""
+    where: article_versions_bool_exp
+  ): [article_versions!]!
+
+  """
+  fetch aggregated fields from the table: "article_versions"
+  """
+  article_versions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [article_versions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_versions_order_by!]
+
+    """filter the rows returned"""
+    where: article_versions_bool_exp
+  ): article_versions_aggregate!
+
+  """
+  fetch data from the table: "article_versions" using primary key columns
+  """
+  article_versions_by_pk(id: bigint!): article_versions
+
+  """
   fetch data from the table: "prompts"
   """
   prompts(
@@ -629,6 +1004,65 @@ type query_root {
 }
 
 type subscription_root {
+  """
+  fetch data from the table: "article_versions"
+  """
+  article_versions(
+    """distinct select on columns"""
+    distinct_on: [article_versions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_versions_order_by!]
+
+    """filter the rows returned"""
+    where: article_versions_bool_exp
+  ): [article_versions!]!
+
+  """
+  fetch aggregated fields from the table: "article_versions"
+  """
+  article_versions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [article_versions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_versions_order_by!]
+
+    """filter the rows returned"""
+    where: article_versions_bool_exp
+  ): article_versions_aggregate!
+
+  """
+  fetch data from the table: "article_versions" using primary key columns
+  """
+  article_versions_by_pk(id: bigint!): article_versions
+
+  """
+  fetch data from the table in a streaming manner: "article_versions"
+  """
+  article_versions_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [article_versions_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: article_versions_bool_exp
+  ): [article_versions!]!
+
   """
   fetch data from the table: "prompts"
   """

@@ -8,6 +8,18 @@ const config = {
     },
     "plugins": {
         "houdini-svelte": {}
+    },
+    scalars: {
+        /* in your case, something like */
+        bigint: {                  // <- The GraphQL Scalar
+          type: "number"  // <-  The TypeScript type
+        },
+        timestamptz: {                  // <- The GraphQL Scalar
+          type: "String"  // <-  The TypeScript type
+        },
+        jsonb: {                  // <- The GraphQL Scalar
+          type: "Object"  // <-  The TypeScript type
+        }
     }
 }
 

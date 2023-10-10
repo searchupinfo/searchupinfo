@@ -1,0 +1,5 @@
+query GetArticleVersions($name: String) {
+  article_versions(where: {name: {_eq: $name}}) {
+    text
+  }
+}

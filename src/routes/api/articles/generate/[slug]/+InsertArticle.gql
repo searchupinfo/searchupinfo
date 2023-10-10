@@ -1,0 +1,7 @@
+mutation InsertArticleVersions($text: String, $name: String) {
+    insert_article_versions(objects: {text: $text, name: $name}) {
+      returning {
+        id
+      }
+    }
+  }
