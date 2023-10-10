@@ -1,7 +1,7 @@
 <section>
     <h1>
-        Welcome to AiKnowIt!
+        Welcome to SearchUpInfo!
     </h1>
-    <p>This is an encyclopedia where the articles are written by an LLM.</p>
-    <p>Search for an article in the top and it will be generated!</p>
+    <p>This is an encyclopedia where the articles are written by an PaLM2.</p>
+    <p>Search for an article at the top and it wait for it to be generated!</p>
 </section>
