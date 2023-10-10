@@ -2,6 +2,8 @@
 
 An encyclopedia written by the large language model PaLM2.
 
+Powered by SvelteKit, Hasura, and Supabase. 
+
 ## Developing
 
 Get your API key at https://makersuite.google.com/app/apikey
