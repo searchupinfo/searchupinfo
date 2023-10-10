@@ -62,22 +62,28 @@ export async function GET(event) {
         // You need to surround the article name in quotes so that it doesn't misinterpret a prompt like "Write the introduction of a wikipedia article about twice" and it returns a generic reponse twice.
         let introductionText = await runModel(`Write the introduction of a wikipedia article about "${articleName}"`, 0.7)
 
-        articleText = `# ${articleName}\n${introductionText}\n`
+        if (introductionText) {
+            articleText = `# ${articleName}\n${introductionText}\n`
+        }
+        else {
+            articleText = 'Article introduction could not be generated.'
+        }
 
         // It is super important to show the sturcture the output is and to specify it not to format it as markdown so that it does not wrap it in ```js ```. Setting temp at 0.0 also reduces the likelihood of this happening. 
-        let responseSectionsString = await runModel(`Return a JSON array as "[..., ...]" with at most 20 elements for the section names of a wikipedia article about "${articleName}". Do not format it as markdown. Do not include an introduction. DO NOT start with \`\`\` and the array must end in with a ] and no trailing comma`, 0.0)
+        let responseSectionsString = await runModel(`Return a valid yaml list with at most 20 elements for the section names of a wikipedia article about "${articleName}". Do not format it as markdown. Do not include an introduction. DO NOT start with \`\`\`, include markdown, or include a "${articleName}" section.`, 0.3)
 
         console.log(responseSectionsString)
 
         if (responseSectionsString) {
-            let responseSections: Array<string> = JSON.parse(responseSectionsString)
+            const regex = /- (.+)/g
+            let responseSections = Array.from(responseSectionsString.matchAll(regex), match => match[1]);
 
             // remove references, see also, external links, elements regardless of case
             responseSections = responseSections.filter(section => !section.match(/references|see also|external links/i))
 
             // write each section
             for (let sectionName of responseSections) {
-                let sectionText = await runModel(`Write the ${sectionName} section of a wikipedia article about "${articleName}". Do not include the title of the section or links inside of the text`, 0.7)
+                let sectionText = await runModel(`Write the "${sectionName}" section of a wikipedia article about "${articleName}". Do not include the title of the section or links inside of the text`, 0.7)
 
                 if (sectionText) {
                     const regexPattern = new RegExp(`^.*\\b${sectionName}\\b.*\\n?`);
