@@ -10,5 +10,9 @@
 </svelte:head>
 
 <section>
-	<p>{@html marked(data.props.articleText)}</p>
+	{#await data.props.articleText}
+	Generating...
+	{:then value}
+	<p>{@html marked(value)}</p>
+	{/await}
 </section>

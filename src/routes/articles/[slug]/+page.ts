@@ -5,19 +5,10 @@ export async function load(event) {
 
   if (articleName.length < 31) {
     if (articleName.toLowerCase() == articleName) {
-
-      // check if the article exists, if it doesn't, generate it
-      const res = await event.fetch('/api/articles/' + articleName)
-      let articleText = await res.text()
-      if (articleText.length == 0) {
-        let response = await event.fetch('/api/articles/generate/' + articleName)
-        articleText = await response.text()
-      }
-
       return {
         props: {
           articleName: articleName,
-          articleText: articleText
+          articleText: getArticleText(event, articleName)
         },
       };
     } else {
@@ -30,4 +21,16 @@ export async function load(event) {
       articleText: 'Title must be less than 31 characters.'
     }
   }
+}
+
+async function getArticleText(event: any, articleName: any) {
+  // check if the article exists, if it doesn't, generate it
+  const res = await event.fetch('/api/articles/' + articleName);
+  let articleText = await res.text();
+  
+  if (articleText.length == 0) {
+    let response = await event.fetch('/api/articles/generate/' + articleName);
+    articleText = await response.text();
+  }
+  return articleText;
 }
