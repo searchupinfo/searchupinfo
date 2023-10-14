@@ -2,7 +2,7 @@
 
 An encyclopedia written by the large language model PaLM2.
 
-Powered by SvelteKit, Hasura, and Supabase. 
+Powered by [SvelteKit](https://kit.svelte.dev/), [Hasura](https://hasura.io/), [Supabase](https://supabase.com/), and [Houdini](https://houdinigraphql.com/). 
 
 ## Developing
 
