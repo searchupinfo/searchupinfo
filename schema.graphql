@@ -74,7 +74,7 @@ type article_versions {
   created_at: timestamptz!
   id: bigint!
   name: String!
-  text: String!
+  text: String
 }
 
 """

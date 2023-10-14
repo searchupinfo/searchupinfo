@@ -1,6 +1,7 @@
 import { TextServiceClient } from "@google-ai/generativelanguage";
 import { GoogleAuth } from "google-auth-library";
 import { GetArticleVersionsStore, InsertArticleVersionsStore } from '$houdini'
+import escapeStringRegexp from 'escape-string-regexp';
 
 async function runModel(promptString: string, temperature: number) {
     const MODEL_NAME = "models/text-bison-001";
@@ -35,8 +36,10 @@ async function runModel(promptString: string, temperature: number) {
         },
     }).then(result => {
         if (result && result[0] && result[0].candidates) {
-            if (result[0].candidates[0])
+            if (result[0].candidates[0]) {
+                console.log(result[0].candidates[0])
                 return result[0].candidates[0].output!;
+            }
             else
                 return null;
         }
@@ -70,7 +73,7 @@ export async function GET(event) {
         }
 
         // It is super important to show the sturcture the output is and to specify it not to format it as markdown so that it does not wrap it in ```js ```. Setting temp at 0.0 also reduces the likelihood of this happening. 
-        let responseSectionsString = await runModel(`Return a valid yaml list with at most 20 elements for the section names of a wikipedia article about "${articleName}". Do not format it as markdown. Do not include an introduction. DO NOT start with \`\`\`, include markdown, or include a "${articleName}" section.`, 0.3)
+        let responseSectionsString = await runModel(`Return a valid yaml list with at most 20 elements for the section names of a wikipedia article about "${articleName}". Do not format it as markdown. Do not include an introduction. DO NOT start with \`\`\`, do not include markdown, do not include a "${articleName}" section.`, 0.3)
 
         console.log(responseSectionsString)
 
@@ -86,7 +89,7 @@ export async function GET(event) {
                 let sectionText = await runModel(`Write the "${sectionName}" section of a wikipedia article about "${articleName}". Do not include the title of the section or links inside of the text`, 0.7)
 
                 if (sectionText) {
-                    const regexPattern = new RegExp(`^.*\\b${sectionName}\\b.*\\n?`);
+                    const regexPattern = new RegExp(`^.*\\b${escapeStringRegexp(sectionName)}\\b.*\\n?`);
                     sectionText = sectionText.replace(regexPattern, '');
                     articleText += `## ${sectionName}\n${sectionText}\n\n`
                 }
