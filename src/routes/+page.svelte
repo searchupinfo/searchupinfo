@@ -1,7 +1,6 @@
 <section>
-    <h1>
-        Welcome to searchup.info!
+    <h1 style="font-size: 4rem;">
+        Welcome to searchup!
     </h1>
-    <p>This is an encyclopedia where all the articles are written by PaLM2.</p>
-    <p>Search for an article at the top right and wait for it to be generated! (search limited to 30 characters)</p>
+    <p style="font-size: 1.5rem;text-align: center">This is an encyclopedia where all the articles are written by PaLM2. <br><br>Search for an article at the top right and wait for it to be generated!<br><br>Generation takes a minute or two and the search is limited to 30 characters.</p>
 </section>
