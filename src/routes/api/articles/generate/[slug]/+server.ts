@@ -9,16 +9,14 @@ export async function GET(event) {
 
     if (articleName.length < 31) {
         async function whichPromptAsync() {
-            const whichPrompt = spawn('python', ['whichPrompt.py', articleName]);
+            const whichPrompt = spawn('python3', ["whichPrompt.py", articleName]);
             const output: number[] = [];
-            
             whichPrompt.stdout.on("data", function(data) {
               output.push(parseInt(data));
             });
-          
             await whichPrompt.on('exit', function() {});
             while(output[0] === undefined) {
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
             return output[0];
           }
@@ -34,7 +32,7 @@ export async function GET(event) {
           
             await whichPrompt.on('exit', function() {});
             while(output[0] === undefined) {
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
             return output[0];
         }
@@ -49,7 +47,7 @@ export async function GET(event) {
           
             await whichPrompt.on('exit', function() {});
             while(output[0] === undefined) {
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
             return output[0];
         }
@@ -64,7 +62,7 @@ export async function GET(event) {
           
             await whichPrompt.on('exit', function() {});
             while(output[0] === undefined) {
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
             return output[0];
         }

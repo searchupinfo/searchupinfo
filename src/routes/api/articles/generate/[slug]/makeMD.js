@@ -81,14 +81,14 @@ async function getAmbiguousAsync() {
 
 const choice = await whichPromptAsync();
 console.log(choice)
-// if(choice === 0) {
-//     const generate = await getGenerateAsync();
-//     console.log(generate);
-// } else if(choice === 1) {
-//     const fromWiki = await getFromWikiAsync();
-//     console.log(fromWiki);
-// } else if(choice === 2) {
-//     const ambiguous = await getAmbiguousAsync();
-//     console.log(ambiguous);
-// }
+if(choice === 0) {
+    const generate = await getGenerateAsync();
+    console.log(generate);
+} else if(choice === 1) {
+    const fromWiki = await getFromWikiAsync();
+    console.log(fromWiki);
+} else if(choice === 2) {
+    const ambiguous = await getAmbiguousAsync();
+    console.log(ambiguous);
+}
 

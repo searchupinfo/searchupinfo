@@ -18,5 +18,4 @@ if(p_wiki.exists()):
 else:
     sys.stdout.write(str(0))
 
-print("BAD STUFF")
 sys.stdout.flush()
