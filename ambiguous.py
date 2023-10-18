@@ -155,7 +155,7 @@ for section in ambiguousSections:
     )
     out = fixText(response.result)
     if outReady(out):
-        sys.stdout.write(out)
+        sys.stdout.write(out.replace('# ', "## "))
         continue
     counter = 0
     while not outReady(out) and counter < 3:
