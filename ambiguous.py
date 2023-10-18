@@ -115,6 +115,7 @@ def removeDupes(section, txt):
         txt[1] = txt[1][len(section) + 1 :]
     return "\n".join(txt)
 
+sys.stdout.write(f" # {topic.title()}")
 
 model = "models/text-bison-001"
 
@@ -167,7 +168,7 @@ for section in ambiguousSections:
         )
         out = fixText(response.result)
         if outReady(response.result):
-            sys.stdout.write( out)
+            sys.stdout.write( out.replace("#", "##"))
             break
         counter += 1
 

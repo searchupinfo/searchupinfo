@@ -115,7 +115,8 @@ def removeDupes(section, txt):
         txt[1] = txt[1][len(section) + 1 :]
     return "\n".join(txt)
 
-
+sys.stdout.write(f" # {topic.title()}")
+sys.stdout.write("\n")
 model = "models/text-bison-001"
 
 parameters = {
@@ -190,7 +191,7 @@ for section in Allsections:
         break
     pageContent = fixSections(str(section))
     #prompt = f"Summarize the following article. Write  ** around words or topics that should be linked to wikipedia articles. Make sure to use markdown formatting when nessesary and always add a space after a sequence of #. Make sure to add a space after a . if it is at the end of a sentence. Follow proper english grammar rules." + "\n\n" + pageContent
-    sys.stdout.write(f"\n\n# {section.title}\n\n")
+    sys.stdout.write(f"\n\n ## {section.title}\n\n")
     prompt = f"Summarize the following article. Do not write any titles or subtitles. Write  ** around words or topics that should be linked to wikipedia articles." + "\n\n" + pageContent
 
     response = palm.generate_text(

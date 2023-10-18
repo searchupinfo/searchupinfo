@@ -139,7 +139,8 @@ response = palm.generate_text(
         {"category": "HARM_CATEGORY_DANGEROUS", "threshold": "BLOCK_ONLY_HIGH"},
     ],
 )
-
+sys.stdout.write(f" # {topic.title()}")
+sys.stdout.write("\n")
 sys.stdout.write(fixText(response.result))
 
 prompt = f"Return a valid yaml list with at most 20 elements for the section names of a wikipedia article about {topic}. Do not format it as markdown. Do not include an introduction. DO NOT start with \`\`\`, include markdown, or include a {topic} section."
@@ -194,8 +195,8 @@ for section in lst:
     )
     if len(fixText(response.result)) < 40:
         continue
-    sys.stdout.write(f"\n # {section}\n")
-    sys.stdout.write(removeDupes(section, fixText(response.result)))
+    sys.stdout.write(f"\n ## {section}\n")
+    sys.stdout.write(removeDupes(section, fixText(response.result)).replace("# ", "## "))
 
 
 sys.stdout.write(1)
