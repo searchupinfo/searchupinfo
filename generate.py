@@ -5,7 +5,6 @@ import sys
 palm.configure(api_key=sys.argv[1])
 topic = sys.argv[2]
 
-
 def fixSections(text):
     text = str(text)
     pattern = r"Section: (.*?)(\(\d+\)):"
@@ -177,7 +176,6 @@ parameters = {
     "top_p": 0.8,
     "top_k": 10,
 }
-
 for section in lst:
     prompt = f"Write the {section} section of a wikipedia article about {topic}. Do not include the title of the section or links inside of the text. Write  ** around a few words or topics that should be linked to wikipedia articles."
     response = palm.generate_text(
@@ -198,6 +196,4 @@ for section in lst:
     sys.stdout.write(f"\n ## {section}\n")
     sys.stdout.write(removeDupes(section, fixText(response.result)).replace("# ", "## "))
 
-
-sys.stdout.write(1)
 sys.stdout.flush()

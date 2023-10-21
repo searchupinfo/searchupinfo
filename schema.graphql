@@ -327,6 +327,172 @@ type article_versions_variance_fields {
   id: Float
 }
 
+"""
+columns and relationships of "articles"
+"""
+type articles {
+  created_at: timestamptz!
+  name: String!
+  text: String
+}
+
+"""
+aggregated selection of "articles"
+"""
+type articles_aggregate {
+  aggregate: articles_aggregate_fields
+  nodes: [articles!]!
+}
+
+"""
+aggregate fields of "articles"
+"""
+type articles_aggregate_fields {
+  count(columns: [articles_select_column!], distinct: Boolean): Int!
+  max: articles_max_fields
+  min: articles_min_fields
+}
+
+"""
+Boolean expression to filter rows from the table "articles". All fields are combined with a logical 'AND'.
+"""
+input articles_bool_exp {
+  _and: [articles_bool_exp!]
+  _not: articles_bool_exp
+  _or: [articles_bool_exp!]
+  created_at: timestamptz_comparison_exp
+  name: String_comparison_exp
+  text: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "articles"
+"""
+enum articles_constraint {
+  """
+  unique or primary key constraint on columns "name"
+  """
+  articles_pkey1
+}
+
+"""
+input type for inserting data into table "articles"
+"""
+input articles_insert_input {
+  created_at: timestamptz
+  name: String
+  text: String
+}
+
+"""aggregate max on columns"""
+type articles_max_fields {
+  created_at: timestamptz
+  name: String
+  text: String
+}
+
+"""aggregate min on columns"""
+type articles_min_fields {
+  created_at: timestamptz
+  name: String
+  text: String
+}
+
+"""
+response of any mutation on the table "articles"
+"""
+type articles_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [articles!]!
+}
+
+"""
+on_conflict condition type for table "articles"
+"""
+input articles_on_conflict {
+  constraint: articles_constraint!
+  update_columns: [articles_update_column!]! = []
+  where: articles_bool_exp
+}
+
+"""Ordering options when selecting data from "articles"."""
+input articles_order_by {
+  created_at: order_by
+  name: order_by
+  text: order_by
+}
+
+"""primary key columns input for table: articles"""
+input articles_pk_columns_input {
+  name: String!
+}
+
+"""
+select columns of table "articles"
+"""
+enum articles_select_column {
+  """column name"""
+  created_at
+
+  """column name"""
+  name
+
+  """column name"""
+  text
+}
+
+"""
+input type for updating data in table "articles"
+"""
+input articles_set_input {
+  created_at: timestamptz
+  name: String
+  text: String
+}
+
+"""
+Streaming cursor of the table "articles"
+"""
+input articles_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: articles_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input articles_stream_cursor_value_input {
+  created_at: timestamptz
+  name: String
+  text: String
+}
+
+"""
+update columns of table "articles"
+"""
+enum articles_update_column {
+  """column name"""
+  created_at
+
+  """column name"""
+  name
+
+  """column name"""
+  text
+}
+
+input articles_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: articles_set_input
+
+  """filter the rows which have to be updated"""
+  where: articles_bool_exp!
+}
+
 scalar bigint
 
 """
@@ -406,6 +572,19 @@ type mutation_root {
   delete_article_versions_by_pk(id: bigint!): article_versions
 
   """
+  delete data from the table: "articles"
+  """
+  delete_articles(
+    """filter the rows which have to be deleted"""
+    where: articles_bool_exp!
+  ): articles_mutation_response
+
+  """
+  delete single row from the table: "articles"
+  """
+  delete_articles_by_pk(name: String!): articles
+
+  """
   delete data from the table: "prompts"
   """
   delete_prompts(
@@ -439,6 +618,28 @@ type mutation_root {
     """upsert condition"""
     on_conflict: article_versions_on_conflict
   ): article_versions
+
+  """
+  insert data into the table: "articles"
+  """
+  insert_articles(
+    """the rows to be inserted"""
+    objects: [articles_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: articles_on_conflict
+  ): articles_mutation_response
+
+  """
+  insert a single row into the table: "articles"
+  """
+  insert_articles_one(
+    """the row to be inserted"""
+    object: articles_insert_input!
+
+    """upsert condition"""
+    on_conflict: articles_on_conflict
+  ): articles
 
   """
   insert data into the table: "prompts"
@@ -495,6 +696,34 @@ type mutation_root {
     """updates to execute, in order"""
     updates: [article_versions_updates!]!
   ): [article_versions_mutation_response]
+
+  """
+  update data of the table: "articles"
+  """
+  update_articles(
+    """sets the columns of the filtered rows to the given values"""
+    _set: articles_set_input
+
+    """filter the rows which have to be updated"""
+    where: articles_bool_exp!
+  ): articles_mutation_response
+
+  """
+  update single row of the table: "articles"
+  """
+  update_articles_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: articles_set_input
+    pk_columns: articles_pk_columns_input!
+  ): articles
+
+  """
+  update multiples rows of table: "articles"
+  """
+  update_articles_many(
+    """updates to execute, in order"""
+    updates: [articles_updates!]!
+  ): [articles_mutation_response]
 
   """
   update data of the table: "prompts"
@@ -960,6 +1189,49 @@ type query_root {
   article_versions_by_pk(id: bigint!): article_versions
 
   """
+  fetch data from the table: "articles"
+  """
+  articles(
+    """distinct select on columns"""
+    distinct_on: [articles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [articles_order_by!]
+
+    """filter the rows returned"""
+    where: articles_bool_exp
+  ): [articles!]!
+
+  """
+  fetch aggregated fields from the table: "articles"
+  """
+  articles_aggregate(
+    """distinct select on columns"""
+    distinct_on: [articles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [articles_order_by!]
+
+    """filter the rows returned"""
+    where: articles_bool_exp
+  ): articles_aggregate!
+
+  """fetch data from the table: "articles" using primary key columns"""
+  articles_by_pk(name: String!): articles
+
+  """
   fetch data from the table: "prompts"
   """
   prompts(
@@ -1062,6 +1334,63 @@ type subscription_root {
     """filter the rows returned"""
     where: article_versions_bool_exp
   ): [article_versions!]!
+
+  """
+  fetch data from the table: "articles"
+  """
+  articles(
+    """distinct select on columns"""
+    distinct_on: [articles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [articles_order_by!]
+
+    """filter the rows returned"""
+    where: articles_bool_exp
+  ): [articles!]!
+
+  """
+  fetch aggregated fields from the table: "articles"
+  """
+  articles_aggregate(
+    """distinct select on columns"""
+    distinct_on: [articles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [articles_order_by!]
+
+    """filter the rows returned"""
+    where: articles_bool_exp
+  ): articles_aggregate!
+
+  """fetch data from the table: "articles" using primary key columns"""
+  articles_by_pk(name: String!): articles
+
+  """
+  fetch data from the table in a streaming manner: "articles"
+  """
+  articles_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [articles_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: articles_bool_exp
+  ): [articles!]!
 
   """
   fetch data from the table: "prompts"

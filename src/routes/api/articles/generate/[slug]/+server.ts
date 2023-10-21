@@ -16,7 +16,7 @@ export async function GET(event) {
             });
             await whichPrompt.on('exit', function() {});
             while(output[0] === undefined) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 100000));
             }
             return output[0];
           }
@@ -32,7 +32,7 @@ export async function GET(event) {
           
             await whichPrompt.on('exit', function() {});
             while(output[0] === undefined) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 100000));
             }
             return output[0];
         }
@@ -47,7 +47,7 @@ export async function GET(event) {
           
             await whichPrompt.on('exit', function() {});
             while(output[0] === undefined) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 100000));
             }
             return output[0];
         }
@@ -62,7 +62,7 @@ export async function GET(event) {
           
             await whichPrompt.on('exit', function() {});
             while(output[0] === undefined) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 100000));
             }
             return output[0];
         }

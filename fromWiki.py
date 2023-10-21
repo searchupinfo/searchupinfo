@@ -226,5 +226,4 @@ for section in Allsections:
         out = fixText(response.result)
         if(outReady(out)):
             sys.stdout.write(out)
-
 sys.stdout.flush()
